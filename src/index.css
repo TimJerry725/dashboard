@@ -1,0 +1,4 @@
+/* Reset and base styles */
+html, body, #root {
+  height: 100%;
+}

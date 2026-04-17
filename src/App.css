@@ -1,0 +1,330 @@
+/* Based on FRONTEND_UI_SYSTEM_GUIDE.md */
+
+:root {
+  --primary-color: #D83A41;
+  --background-color: #F5F7F9;
+  --text-color: #333333;
+  --border-color: #E5E5E5;
+  
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 60px;
+  --header-height: 64px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Ant Design Overrides */
+.ant-btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: #E54a51 !important;
+  border-color: #E54a51 !important;
+}
+
+/* Glassmorphism Header */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 60px; /* Aligned with slim sidebar */
+  right: 0;
+  height: var(--header-height);
+  background: rgba(255, 255, 255, 1); /* Solid background for reliability */
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  z-index: 1000; /* Higher z-index to stay above everything */
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+}
+
+/* Slim Sidebar Styling */
+.app-sidebar-slim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  background: #ffffff;
+  border-right: 1px solid #f0f0f0;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.sidebar-logo {
+  width: 32px;
+  height: 32px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.nav-item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #595959;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: none;
+  border: none;
+  text-decoration: none;
+}
+
+.nav-item:hover, .nav-item.active {
+  background: #fff1f0;
+  color: #D83A41;
+}
+
+.sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.main-content {
+  padding-top: 64px; /* Header height only */
+  transition: margin-left 0.2s;
+  min-height: 100vh;
+}
+
+/* Responsive Dashboard Header */
+.dashboard-red-header {
+  background: var(--primary-color);
+  padding: 32px 24px 88px;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .dashboard-red-header {
+    padding: 24px 16px 72px;
+  }
+}
+
+/* Responsive Toolbar */
+.toolbar-container {
+  margin: -44px 24px 24px;
+  background: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .toolbar-container {
+    margin: -32px 16px 24px;
+    padding: 16px;
+  }
+}
+
+.content-row-wrapper {
+  padding: 0 24px 24px;
+}
+
+@media (max-width: 768px) {
+  .content-row-wrapper {
+    padding: 0 16px 24px;
+  }
+}
+
+/* Dashboard Specifics */
+.stat-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.stat-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+}
+
+.pill {
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: #f0f0f0;
+  color: #666;
+}
+
+.pill.active {
+  background: #ffccc7;
+  color: #D83A41;
+}
+
+.pill-link {
+  color: #999;
+  cursor: pointer;
+}
+
+.time-filters .ant-btn {
+  border-radius: 16px;
+  margin-left: 8px;
+}
+
+.connector-icon-box {
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #fa541c;
+}
+
+.chart-legend {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.legend-item {
+  font-size: 12px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dot.mobile { background: #1890ff; }
+.dot.cms { background: #52c41a; }
+.dot.rfid { background: #faad14; }
+.dot.autocharge { background: #13c2c2; }
+
+.annotation-label {
+  position: absolute;
+  right: 40px;
+  top: -12px;
+  background: #fff;
+  padding: 2px 8px;
+  border: 1px solid #ff4d4f;
+  border-radius: 10px;
+  color: #ff4d4f;
+  font-size: 10px;
+  font-weight: 600;
+}
+.rounded-btn {
+  border-radius: 16px !important;
+  font-size: 12px !important;
+  padding: 0 16px !important;
+}
+
+.active-filter {
+  background: #ffccc7 !important;
+  color: #D83A41 !important;
+  border: none !important;
+}
+
+.connector-item {
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fa541c;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.connector-item:hover {
+  background: #fff7e6;
+  border-color: #ffd591;
+}
+
+.connector-item.connector-active {
+  background: #fff1f0;
+  border-color: #D83A41;
+  color: #D83A41;
+  font-weight: 600;
+}
+
+.axis-label-y {
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: rotate(-90deg);
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.axis-label-x {
+  text-align: center;
+  margin-top: 16px;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+.chart-annotation-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #ff4d4f;
+  opacity: 0.4;
+  pointer-events: none;
+}
