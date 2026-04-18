@@ -293,7 +293,7 @@ function buildChartOption(
       name: bItem.name,
       type: 'bar',
       stack: 'total',
-      data: stationKeys.map((sKey, sIdx) => {
+      data: stationKeys.map((_, sIdx) => {
         const d = generateData(labels, multiplier * 1.5 * (1 - bIdx * 0.15), bItem.seed + sIdx);
         return d.reduce((a, b) => a + b, 0);
       }),
