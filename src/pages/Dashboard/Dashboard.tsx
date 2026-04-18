@@ -444,16 +444,16 @@ function buildChartOption(
           silent: true,
           symbol: ['none', 'none'],
           z: 10,
-          lineStyle: { type: 'dashed', color: '#ff4d4f', width: 2 },
+          lineStyle: { type: 'dashed', color: '#0B173B', width: 2 },
           label: {
             formatter: `Lifetime Average: ${avgValue.toFixed(0)} ${unit}`,
             position: 'middle',
             distance: 0,
             verticalAlign: 'middle',
-            color: '#0B173B',
+            color: 'white',
             fontSize: 12,
             fontWeight: '600',
-            backgroundColor: '#FFF1F0',
+            backgroundColor: '#0B173B',
             borderColor: '#0B173B',
             borderWidth: 1,
             borderRadius: 4,
@@ -611,7 +611,7 @@ const Dashboard: React.FC = () => {
                 />
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Text type="secondary" style={{ fontSize: '12px', fontWeight: 600 }}>Breakdown by (y-axis)</Text>
+                <Text type="secondary" style={{ fontSize: '12px', fontWeight: 600 }}>Breakdown by (Secondary y-axis)</Text>
                 <Select
                   value={breakdown}
                   onChange={(val) => setBreakdown(val as Breakdown)}
