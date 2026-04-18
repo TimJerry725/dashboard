@@ -10,8 +10,7 @@ import {
   TreeSelect, 
   Space,
   Typography,
-  Flex,
-  Divider
+  Flex
 } from 'antd';
 import { 
   SearchOutlined, 
