@@ -9,7 +9,9 @@ import {
   Select, 
   TreeSelect, 
   Space,
-  Typography
+  Typography,
+  Flex,
+  Divider
 } from 'antd';
 import { 
   SearchOutlined, 
@@ -564,60 +566,52 @@ const Dashboard: React.FC = () => {
 
 
 
-      <div className="content-row-wrapper" style={{ padding: '0px 32px 32px' }}>
+      <div style={{ padding: '16px 32px 32px' }}>
         <Card 
           bordered={false} 
           style={{ borderRadius: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.06)', overflow: 'hidden' }} 
-          bodyStyle={{ padding: 0 }} 
           styles={{ body: { padding: 0 } }}
         >
           
           {/* Sticky Toolbar */}
-          <div style={{ 
-            padding: '4px 24px', 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'center', 
-            borderBottom: '1px solid #f0f0f0', 
-            flexWrap: 'wrap', 
-            gap: '16px',
-            position: 'sticky',
-            top: 64,
-            zIndex: 10,
-            background: '#fff'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
-              <Text strong style={{ fontSize: '14px', color: '#666' }}>Search by date range</Text>
+          <Flex
+            justify="space-between"
+            align="center"
+            wrap="wrap"
+            gap={12}
+            style={{ padding: '8px 24px', borderBottom: '1px solid #f0f0f0', background: '#fff', borderRadius: '12px 12px 0 0' }}
+          >
+            <Flex align="center" gap={12} wrap="wrap">
+              <Text strong style={{ fontSize: '13px', color: '#666' }}>Search by date range</Text>
               <RangePicker 
                 value={dateRange}
                 onChange={(val) => setDateRange(val)}
-                style={{ borderRadius: '6px', width: '420px', border: '1px solid #e8e8e8' }} 
+                style={{ borderRadius: '6px', width: '320px' }} 
+                size="small"
               />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            </Flex>
+            <Flex align="center" gap={16}>
+              <Flex align="center" gap={8}>
                 <Text type="secondary" style={{ fontSize: '12px', fontWeight: 600 }}>Y-axis</Text>
                 <Select
                   value={metric}
                   onChange={(val) => setMetric(val as ChartMetric)}
                   style={{ width: 110 }}
                   size="small"
-                  className="metric-select"
                   options={[
                     { value: 'energy', label: 'Energy' },
                     { value: 'sessions', label: 'Sessions' },
                     { value: 'revenue', label: 'Revenue' },
                   ]}
                 />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              </Flex>
+              <Flex align="center" gap={8}>
                 <Text type="secondary" style={{ fontSize: '12px', fontWeight: 600 }}>Breakdown by (Secondary y-axis)</Text>
                 <Select
                   value={breakdown}
                   onChange={(val) => setBreakdown(val as Breakdown)}
                   style={{ width: 160 }}
                   size="small"
-                  className="metric-select"
                   options={[
                     { value: 'connector', label: 'Connector Type' },
                     { value: 'transaction', label: 'Transaction Mode' },
@@ -625,9 +619,9 @@ const Dashboard: React.FC = () => {
                     { value: 'charger_make', label: 'Charger Make' },
                   ]}
                 />
-              </div>
-            </div>
-          </div>
+              </Flex>
+            </Flex>
+          </Flex>
 
           <Row style={{ minHeight: '600px' }}>
             {/* ── Filter Panel ── */}
