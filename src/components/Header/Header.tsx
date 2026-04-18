@@ -7,7 +7,7 @@ interface HeaderProps {
   sidebarCollapsed: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ sidebarCollapsed }) => {
+const Header: React.FC<HeaderProps> = ({ sidebarCollapsed: _sidebarCollapsed }) => {
   return (
     <header className="app-header">
       <div style={{ flex: 1 }}>

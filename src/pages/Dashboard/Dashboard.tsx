@@ -19,9 +19,9 @@ import {
 import ReactECharts from 'echarts-for-react';
 
 // Connector SVGs
-import type2Svg from '../../assets/Type 2.svg';
-import ccs2Svg from '../../assets/CCS2.svg';
-import chademoSvg from '../../assets/CHAdeMo.svg';
+import type2Svg from '../../assets/type_2.svg';
+import ccs2Svg from '../../assets/ccs2.svg';
+import chademoSvg from '../../assets/chademo.svg';
 
 const { RangePicker } = DatePicker;
 const { Title, Text } = Typography;

@@ -12,7 +12,7 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle }) => {
+const Sidebar: React.FC<SidebarProps> = ({ collapsed: _collapsed, onToggle: _onToggle }) => {
   const menuItems = [
     { icon: faChartPie, path: '/' },
   ];
