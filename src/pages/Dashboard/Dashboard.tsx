@@ -29,7 +29,7 @@ const { Title, Text } = Typography;
 // ───── Types ─────
 type TimePeriod = 'daily' | 'weekly' | 'monthly' | 'yearly';
 type Perspective = 'cpid' | 'station' | 'time';
-type Breakdown = 'connector' | 'transaction' | 'vehicle';
+type Breakdown = 'connector' | 'transaction' | 'vehicle' | 'charger_make';
 type ChartMetric = 'energy' | 'sessions' | 'revenue';
 
 // ───── Constants ─────
@@ -174,6 +174,21 @@ function buildChartOption(
       name: item.name,
       type: 'bar', stack: 'total',
       data: generateData(labels, totalScale * multiplier * (1 - idx * 0.2), item.seed),
+      itemStyle: { color: item.color, borderRadius: idx === items.length - 1 ? [3, 3, 0, 0] : 0 },
+      emphasis: { focus: 'series' },
+      barMaxWidth: 28,
+    }));
+  } else if (breakdown === 'charger_make') {
+    const items = [
+      { name: 'ABB', color: '#1890ff', seed: 11 },
+      { name: 'Delta', color: '#52c41a', seed: 12 },
+      { name: 'Tritium', color: '#faad14', seed: 13 },
+      { name: 'Schneider', color: '#13c2c2', seed: 14 },
+    ];
+    series = items.map((item, idx) => ({
+      name: item.name,
+      type: 'bar', stack: 'total',
+      data: generateData(labels, totalScale * multiplier * (1 - idx * 0.18), item.seed),
       itemStyle: { color: item.color, borderRadius: idx === items.length - 1 ? [3, 3, 0, 0] : 0 },
       emphasis: { focus: 'series' },
       barMaxWidth: 28,
@@ -467,6 +482,7 @@ const Dashboard: React.FC = () => {
                     <Button size="small" className={`rounded-btn${breakdown === 'connector' ? ' active-filter' : ''}`} onClick={() => setBreakdown('connector')}>Connector Type</Button>
                     <Button size="small" className={`rounded-btn${breakdown === 'transaction' ? ' active-filter' : ''}`} onClick={() => setBreakdown('transaction')}>Transaction Mode</Button>
                     <Button size="small" className={`rounded-btn${breakdown === 'vehicle' ? ' active-filter' : ''}`} onClick={() => setBreakdown('vehicle')}>Vehicle</Button>
+                    <Button size="small" className={`rounded-btn${breakdown === 'charger_make' ? ' active-filter' : ''}`} onClick={() => setBreakdown('charger_make')}>Charger Make</Button>
                   </Space>
                 </div>
               </div>
