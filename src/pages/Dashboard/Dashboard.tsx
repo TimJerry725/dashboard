@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import dayjs from 'dayjs';
 import { 
   Card, 
   Row, 
@@ -35,9 +36,9 @@ type ChartMetric = 'energy' | 'sessions' | 'revenue';
 // ───── Constants ─────
 const TIME_LABELS: Record<TimePeriod, string[]> = {
   daily:   Array.from({ length: 24 }, (_, i) => `${String(i).padStart(2, '0')}:00`),
-  weekly:  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  monthly: Array.from({ length: 30 }, (_, i) => `${i + 1}`),
-  yearly:  ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  weekly:  ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+  monthly: Array.from({ length: 12 }, (_, i) => `Month ${i + 1}`),
+  yearly:  Array.from({ length: 5 }, (_, i) => `Year ${i + 1}`),
 };
 
 const CPID_WEIGHTS: Record<string, number> = {
@@ -133,9 +134,29 @@ function buildChartOption(
   perspective: Perspective,
   breakdown: Breakdown,
   selectedLocations: string[],
-  activeConnectors: string[]
+  activeConnectors: string[],
+  dateRange: any
 ): any {
-  const labels = TIME_LABELS[timePeriod];
+  let labels = TIME_LABELS[timePeriod];
+
+  if (timePeriod === 'daily') {
+    if (dateRange && dateRange[0] && dateRange[1]) {
+      const start = dateRange[0];
+      const end = dateRange[1];
+      const diff = end.diff(start, 'day');
+      labels = [];
+      for (let i = 0; i <= diff; i++) {
+        labels.push(start.add(i, 'day').format('DD MMM'));
+      }
+    } else {
+      // Past 7 days default
+      labels = [];
+      for (let i = 6; i >= 0; i--) {
+        labels.push(dayjs().subtract(i, 'day').format('DD MMM'));
+      }
+    }
+  }
+
   const activeCPIDs = resolveSelectedCPIDs(selectedLocations);
   const locationScale = activeCPIDs.reduce((sum, k) => sum + (CPID_WEIGHTS[k] || 0.3), 0) / ALL_CPIDS.length;
   const connectorScale = activeConnectors.length / 3;
@@ -150,10 +171,10 @@ function buildChartOption(
 
   if (breakdown === 'transaction') {
     const items = [
-      { name: 'Mobile', color: '#1890ff', seed: 1 },
-      { name: 'CMS', color: '#52c41a', seed: 2 },
-      { name: 'RFID', color: '#faad14', seed: 3 },
-      { name: 'Autocharge', color: '#13c2c2', seed: 4 },
+      { name: 'Mobile', color: '#91caff', seed: 1 },
+      { name: 'CMS', color: '#95de64', seed: 2 },
+      { name: 'RFID', color: '#ffd666', seed: 3 },
+      { name: 'Autocharge', color: '#5cdbd3', seed: 4 },
     ];
     series = items.map((item, idx) => ({
       name: item.name,
@@ -165,10 +186,10 @@ function buildChartOption(
     }));
   } else if (breakdown === 'vehicle') {
     const items = [
-      { name: 'Tata Nexon EV', color: '#1890ff', seed: 7 },
-      { name: 'MG ZS EV', color: '#52c41a', seed: 8 },
-      { name: 'Tata Tiago EV', color: '#faad14', seed: 9 },
-      { name: 'Hyundai Ioniq 5', color: '#722ed1', seed: 10 },
+      { name: 'Tata Nexon EV', color: '#69c0ff', seed: 7 },
+      { name: 'MG ZS EV', color: '#b7eb8f', seed: 8 },
+      { name: 'Tata Tiago EV', color: '#ffd666', seed: 9 },
+      { name: 'Hyundai Ioniq 5', color: '#b37feb', seed: 10 },
     ];
     series = items.map((item, idx) => ({
       name: item.name,
@@ -180,10 +201,10 @@ function buildChartOption(
     }));
   } else if (breakdown === 'charger_make') {
     const items = [
-      { name: 'ABB', color: '#1890ff', seed: 11 },
-      { name: 'Delta', color: '#52c41a', seed: 12 },
-      { name: 'Tritium', color: '#faad14', seed: 13 },
-      { name: 'Schneider', color: '#13c2c2', seed: 14 },
+      { name: 'ABB', color: '#91caff', seed: 11 },
+      { name: 'Delta', color: '#95de64', seed: 12 },
+      { name: 'Tritium', color: '#ffd666', seed: 13 },
+      { name: 'Schneider', color: '#5cdbd3', seed: 14 },
     ];
     series = items.map((item, idx) => ({
       name: item.name,
@@ -195,9 +216,9 @@ function buildChartOption(
     }));
   } else {
     const connectorMeta: Record<string, { name: string; color: string; seed: number }> = {
-      type2: { name: 'Type 2', color: '#1890ff', seed: 10 },
-      ccs2: { name: 'CCS2', color: '#52c41a', seed: 20 },
-      chademo: { name: 'CHAdeMO', color: '#faad14', seed: 30 },
+      type2: { name: 'Type 2', color: '#91caff', seed: 10 },
+      ccs2: { name: 'CCS2', color: '#95de64', seed: 20 },
+      chademo: { name: 'CHAdeMO', color: '#ffd666', seed: 30 },
     };
     const items = activeConnectors.map(c => connectorMeta[c]).filter(Boolean);
     series = items.map((item, idx) => ({
@@ -210,41 +231,84 @@ function buildChartOption(
     }));
   }
 
+  const isTimePerspective = perspective === 'time';
+  let chartXData = labels;
+
+  // Breakdown definition map for reuse
+  const breakdownMeta: Record<Breakdown, { name: string; color: string; seed: number }[]> = {
+    transaction: [
+      { name: 'Mobile', color: '#91caff', seed: 1 },
+      { name: 'CMS', color: '#95de64', seed: 2 },
+      { name: 'RFID', color: '#ffd666', seed: 3 },
+      { name: 'Autocharge', color: '#5cdbd3', seed: 4 },
+    ],
+    vehicle: [
+      { name: 'Tata Nexon EV', color: '#69c0ff', seed: 7 },
+      { name: 'MG ZS EV', color: '#b7eb8f', seed: 8 },
+      { name: 'Tata Tiago EV', color: '#ffd666', seed: 9 },
+      { name: 'Hyundai Ioniq 5', color: '#b37feb', seed: 10 },
+    ],
+    charger_make: [
+      { name: 'ABB', color: '#91caff', seed: 11 },
+      { name: 'Delta', color: '#95de64', seed: 12 },
+      { name: 'Tritium', color: '#ffd666', seed: 13 },
+      { name: 'Schneider', color: '#5cdbd3', seed: 14 },
+    ],
+    connector: [
+      { name: 'Type 2', color: '#91caff', seed: 10 },
+      { name: 'CCS2', color: '#95de64', seed: 20 },
+      { name: 'CHAdeMo', color: '#ffd666', seed: 30 },
+    ]
+  };
+
+  const currentBreakdownItems = breakdownMeta[breakdown].filter(item => 
+    breakdown !== 'connector' || activeConnectors.includes(item.name.toLowerCase().replace(' ', '')) || activeConnectors.includes(item.name.toLowerCase())
+  );
+
   if (perspective === 'cpid') {
-    series = activeCPIDs.slice(0, 6).map((cpid, idx) => {
-      const colors = ['#1890ff', '#52c41a', '#faad14', '#13c2c2', '#722ed1', '#eb2f96'];
-      return {
-        name: cpid.toUpperCase().replace('-', ' '),
-        type: 'bar',
-        data: generateData(labels, totalScale * multiplier * (CPID_WEIGHTS[cpid] || 0.5), idx + 50),
-        itemStyle: { color: colors[idx % colors.length], borderRadius: [3, 3, 0, 0] },
-        emphasis: { focus: 'series' },
-        barMaxWidth: 20,
-      };
-    });
+    const cpids = activeCPIDs.slice(0, 12);
+    chartXData = cpids.map(c => c.toUpperCase().replace('-', ' '));
+    series = currentBreakdownItems.map((bItem, bIdx) => ({
+      name: bItem.name,
+      type: 'bar',
+      stack: 'total',
+      data: cpids.map((cpid, cIdx) => {
+        const d = generateData(labels, multiplier * (CPID_WEIGHTS[cpid] || 0.5) * (1 - bIdx * 0.15), bItem.seed + cIdx);
+        return d.reduce((a, b) => a + b, 0);
+      }),
+      itemStyle: { color: bItem.color, borderRadius: bIdx === currentBreakdownItems.length - 1 ? [4, 4, 0, 0] : 0 },
+      barMaxWidth: 60,
+    }));
   } else if (perspective === 'station') {
-    const stations = [
-      { name: 'Steam-a', key: 'steam-a', color: '#1890ff', seed: 60 },
-      { name: 'PSG', key: 'psg', color: '#52c41a', seed: 70 },
-      { name: 'KCT', key: 'kct', color: '#faad14', seed: 80 },
-      { name: 'Hotel Radisson', key: 'hotel-radisson', color: '#13c2c2', seed: 90 },
-    ];
-    series = stations.map(s => ({
-      name: s.name, type: 'bar',
-      data: generateData(labels, totalScale * multiplier * 0.6, s.seed),
-      itemStyle: { color: s.color, borderRadius: [3, 3, 0, 0] },
-      emphasis: { focus: 'series' },
-      barMaxWidth: 20,
+    const stationKeys = Object.keys(STATION_CPIDS).filter(k => 
+      selectedLocations.length === 0 || 
+      selectedLocations.includes(k) || 
+      selectedLocations.includes('india') ||
+      selectedLocations.includes('south') ||
+      selectedLocations.includes('tamil-nadu')
+    ).filter(k => k !== 'india' && k !== 'south' && k !== 'tamil-nadu' && k !== 'kerala' && k !== 'karnataka' && k !== 'north' && k !== 'east');
+
+    chartXData = stationKeys.map(k => k.charAt(0).toUpperCase() + k.slice(1).replace('-', ' '));
+    series = currentBreakdownItems.map((bItem, bIdx) => ({
+      name: bItem.name,
+      type: 'bar',
+      stack: 'total',
+      data: stationKeys.map((sKey, sIdx) => {
+        const d = generateData(labels, multiplier * 1.5 * (1 - bIdx * 0.15), bItem.seed + sIdx);
+        return d.reduce((a, b) => a + b, 0);
+      }),
+      itemStyle: { color: bItem.color, borderRadius: bIdx === currentBreakdownItems.length - 1 ? [4, 4, 0, 0] : 0 },
+      barMaxWidth: 80,
     }));
   }
 
   const avgValue = Math.round(totalScale * multiplier * 45);
-
   const legendData = series.map(s => s.name);
 
   return {
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     legend: { 
+      show: true,
       data: legendData,
       top: 0, 
       right: 0, 
@@ -258,11 +322,11 @@ function buildChartOption(
       containLabel: true
     },
     xAxis: {
-      type: 'category', data: labels, axisTick: { show: false },
+      type: 'category', data: chartXData, axisTick: { show: false },
       axisLine: { lineStyle: { color: '#e5e5e5' } },
-      axisLabel: { color: '#999', fontSize: 11 },
-      name: timePeriod === 'daily' ? 'Hours' : timePeriod === 'weekly' ? 'Days' : timePeriod === 'monthly' ? 'Date' : 'Month',
-      nameLocation: 'middle', nameGap: 28, nameTextStyle: { color: '#D83A41', fontWeight: 'bold', fontSize: 12 },
+      axisLabel: { color: '#999', fontSize: 11, rotate: isTimePerspective ? 0 : 30 },
+      name: isTimePerspective ? (timePeriod === 'daily' ? 'Days' : timePeriod === 'weekly' ? 'Weeks' : timePeriod === 'monthly' ? 'Months' : 'Years') : (perspective === 'cpid' ? 'CPIDs' : 'Stations'),
+      nameLocation: 'middle', nameGap: isTimePerspective ? 28 : 55, nameTextStyle: { color: '#D83A41', fontWeight: 'bold', fontSize: 12 },
     },
     yAxis: {
       type: 'value', name: unit,
@@ -272,7 +336,7 @@ function buildChartOption(
     },
     series: [
       ...series,
-      {
+      ...(isTimePerspective ? [{
         name: '__avg__', type: 'line', data: [],
         markLine: {
           silent: true, symbol: 'none',
@@ -292,7 +356,7 @@ function buildChartOption(
           },
           data: [{ yAxis: avgValue }],
         },
-      },
+      }] : []),
     ],
     animationDuration: 600,
   };
@@ -300,13 +364,14 @@ function buildChartOption(
 
 // ───── Component ─────
 const Dashboard: React.FC = () => {
-  const [timePeriod, setTimePeriod] = useState<TimePeriod>('weekly');
+  const [timePeriod, setTimePeriod] = useState<TimePeriod>('daily');
   const [perspective, setPerspective] = useState<Perspective>('time');
   const [breakdown, setBreakdown] = useState<Breakdown>('transaction');
   const [metric, setMetric] = useState<ChartMetric>('energy');
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
   const [tempSelectedLocations, setTempSelectedLocations] = useState<string[]>([]);
   const [activeConnectors, setActiveConnectors] = useState<string[]>(['type2', 'ccs2', 'chademo']);
+  const [dateRange, setDateRange] = useState<any>(null);
 
   const toggleConnector = (key: string) => {
     setActiveConnectors(prev =>
@@ -315,8 +380,8 @@ const Dashboard: React.FC = () => {
   };
 
   const chartOption = useMemo(
-    () => buildChartOption(metric, timePeriod, perspective, breakdown, selectedLocations, activeConnectors),
-    [metric, timePeriod, perspective, breakdown, selectedLocations, activeConnectors]
+    () => buildChartOption(metric, timePeriod, perspective, breakdown, selectedLocations, activeConnectors, dateRange),
+    [metric, timePeriod, perspective, breakdown, selectedLocations, activeConnectors, dateRange]
   );
 
   return (
@@ -345,7 +410,11 @@ const Dashboard: React.FC = () => {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
               <Text strong style={{ fontSize: '14px', color: '#666' }}>Search by date range</Text>
-              <RangePicker style={{ borderRadius: '6px', width: '420px', border: '1px solid #e8e8e8' }} />
+              <RangePicker 
+                value={dateRange}
+                onChange={(val) => setDateRange(val)}
+                style={{ borderRadius: '6px', width: '420px', border: '1px solid #e8e8e8' }} 
+              />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <Select
