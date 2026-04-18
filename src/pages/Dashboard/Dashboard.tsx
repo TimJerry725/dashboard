@@ -150,10 +150,10 @@ function buildChartOption(
 
   if (breakdown === 'transaction') {
     const items = [
-      { name: 'Mobile', color: '#91caff', seed: 1 },
-      { name: 'CMS', color: '#95de64', seed: 2 },
-      { name: 'RFID', color: '#ffd666', seed: 3 },
-      { name: 'Autocharge', color: '#5cdbd3', seed: 4 },
+      { name: 'Mobile', color: '#1890ff', seed: 1 },
+      { name: 'CMS', color: '#52c41a', seed: 2 },
+      { name: 'RFID', color: '#faad14', seed: 3 },
+      { name: 'Autocharge', color: '#13c2c2', seed: 4 },
     ];
     series = items.map((item, idx) => ({
       name: item.name,
@@ -165,10 +165,10 @@ function buildChartOption(
     }));
   } else if (breakdown === 'vehicle') {
     const items = [
-      { name: 'Tata Nexon EV', color: '#69c0ff', seed: 7 },
-      { name: 'MG ZS EV', color: '#b7eb8f', seed: 8 },
-      { name: 'Tata Tiago EV', color: '#ffd666', seed: 9 },
-      { name: 'Hyundai Ioniq 5', color: '#b37feb', seed: 10 },
+      { name: 'Tata Nexon EV', color: '#1890ff', seed: 7 },
+      { name: 'MG ZS EV', color: '#52c41a', seed: 8 },
+      { name: 'Tata Tiago EV', color: '#faad14', seed: 9 },
+      { name: 'Hyundai Ioniq 5', color: '#722ed1', seed: 10 },
     ];
     series = items.map((item, idx) => ({
       name: item.name,
@@ -180,10 +180,10 @@ function buildChartOption(
     }));
   } else if (breakdown === 'charger_make') {
     const items = [
-      { name: 'ABB', color: '#91caff', seed: 11 },
-      { name: 'Delta', color: '#95de64', seed: 12 },
-      { name: 'Tritium', color: '#ffd666', seed: 13 },
-      { name: 'Schneider', color: '#5cdbd3', seed: 14 },
+      { name: 'ABB', color: '#1890ff', seed: 11 },
+      { name: 'Delta', color: '#52c41a', seed: 12 },
+      { name: 'Tritium', color: '#faad14', seed: 13 },
+      { name: 'Schneider', color: '#13c2c2', seed: 14 },
     ];
     series = items.map((item, idx) => ({
       name: item.name,
@@ -195,9 +195,9 @@ function buildChartOption(
     }));
   } else {
     const connectorMeta: Record<string, { name: string; color: string; seed: number }> = {
-      type2: { name: 'Type 2', color: '#91caff', seed: 10 },
-      ccs2: { name: 'CCS2', color: '#95de64', seed: 20 },
-      chademo: { name: 'CHAdeMO', color: '#ffd666', seed: 30 },
+      type2: { name: 'Type 2', color: '#1890ff', seed: 10 },
+      ccs2: { name: 'CCS2', color: '#52c41a', seed: 20 },
+      chademo: { name: 'CHAdeMO', color: '#faad14', seed: 30 },
     };
     const items = activeConnectors.map(c => connectorMeta[c]).filter(Boolean);
     series = items.map((item, idx) => ({
@@ -212,7 +212,7 @@ function buildChartOption(
 
   if (perspective === 'cpid') {
     series = activeCPIDs.slice(0, 6).map((cpid, idx) => {
-      const colors = ['#91caff', '#95de64', '#ffd666', '#5cdbd3', '#b37feb', '#adc6ff'];
+      const colors = ['#1890ff', '#52c41a', '#faad14', '#13c2c2', '#722ed1', '#eb2f96'];
       return {
         name: cpid.toUpperCase().replace('-', ' '),
         type: 'bar',
@@ -224,10 +224,10 @@ function buildChartOption(
     });
   } else if (perspective === 'station') {
     const stations = [
-      { name: 'Steam-a', key: 'steam-a', color: '#91caff', seed: 60 },
-      { name: 'PSG', key: 'psg', color: '#95de64', seed: 70 },
-      { name: 'KCT', key: 'kct', color: '#ffd666', seed: 80 },
-      { name: 'Hotel Radisson', key: 'hotel-radisson', color: '#5cdbd3', seed: 90 },
+      { name: 'Steam-a', key: 'steam-a', color: '#1890ff', seed: 60 },
+      { name: 'PSG', key: 'psg', color: '#52c41a', seed: 70 },
+      { name: 'KCT', key: 'kct', color: '#faad14', seed: 80 },
+      { name: 'Hotel Radisson', key: 'hotel-radisson', color: '#13c2c2', seed: 90 },
     ];
     series = stations.map(s => ({
       name: s.name, type: 'bar',
