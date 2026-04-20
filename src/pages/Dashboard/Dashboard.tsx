@@ -623,8 +623,49 @@ const Dashboard: React.FC = () => {
           </Flex>
 
           <Row style={{ minHeight: '600px' }}>
+            {/* ── Chart Panel ── */}
+            <Col xs={24} lg={19} style={{ padding: '24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <Title level={5} style={{ margin: 0, fontWeight: 700, color: 'var(--primary-color)' }}>Chart</Title>
+                <Space size="middle">
+
+                  <ReloadOutlined style={{ color: '#8c8c8c', cursor: 'pointer' }} />
+                  <FullscreenOutlined style={{ color: '#8c8c8c', cursor: 'pointer' }} />
+                  <MoreOutlined style={{ color: '#8c8c8c', cursor: 'pointer' }} />
+                </Space>
+              </div>
+
+              <ReactECharts
+                option={chartOption}
+                style={{ height: '420px', width: '100%' }}
+                notMerge={true}
+              />
+
+              <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f5f5f5', paddingTop: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <Text type="secondary" style={{ fontSize: '12px', fontWeight: 600 }}>Perspective (x-axis)</Text>
+                  <Space size={8}>
+                    { (['cpid', 'station', 'state', 'time'] as Perspective[]).map(p => (
+                      <Button key={p} size="small" className={`rounded-btn${perspective === p ? ' active-filter' : ''}`} onClick={() => setPerspective(p)}>
+                        {p === 'cpid' ? 'CPID' : p === 'station' ? 'Charging Station' : p === 'state' ? 'State' : 'Date'}
+                      </Button>
+                    ))}
+                  </Space>
+                </div>
+                {perspective === 'time' && (
+                  <Space size="small">
+                    {(['daily', 'weekly', 'monthly', 'yearly'] as TimePeriod[]).map(tp => (
+                      <Button key={tp} size="small" className={`rounded-btn${timePeriod === tp ? ' active-filter' : ''}`} onClick={() => setTimePeriod(tp)}>
+                        {tp.charAt(0).toUpperCase() + tp.slice(1)}
+                      </Button>
+                    ))}
+                  </Space>
+                )}
+              </div>
+            </Col>
+
             {/* ── Filter Panel ── */}
-            <Col xs={24} lg={5} style={{ borderRight: '1px solid #f0f0f0', padding: '24px', display: 'flex', flexDirection: 'column' }}>
+            <Col xs={24} lg={5} style={{ borderLeft: '1px solid #f0f0f0', padding: '24px', display: 'flex', flexDirection: 'column' }}>
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
                   <SearchOutlined style={{ color: 'var(--primary-color)' }} />
@@ -698,47 +739,6 @@ const Dashboard: React.FC = () => {
                     </div>
                   ))}
                 </div>
-              </div>
-            </Col>
-
-            {/* ── Chart Panel ── */}
-            <Col xs={24} lg={19} style={{ padding: '24px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                <Title level={5} style={{ margin: 0, fontWeight: 700, color: 'var(--primary-color)' }}>Chart</Title>
-                <Space size="middle">
-
-                  <ReloadOutlined style={{ color: '#8c8c8c', cursor: 'pointer' }} />
-                  <FullscreenOutlined style={{ color: '#8c8c8c', cursor: 'pointer' }} />
-                  <MoreOutlined style={{ color: '#8c8c8c', cursor: 'pointer' }} />
-                </Space>
-              </div>
-
-              <ReactECharts
-                option={chartOption}
-                style={{ height: '420px', width: '100%' }}
-                notMerge={true}
-              />
-
-              <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #f5f5f5', paddingTop: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <Text type="secondary" style={{ fontSize: '12px', fontWeight: 600 }}>Perspective (x-axis)</Text>
-                  <Space size={8}>
-                    { (['cpid', 'station', 'state', 'time'] as Perspective[]).map(p => (
-                      <Button key={p} size="small" className={`rounded-btn${perspective === p ? ' active-filter' : ''}`} onClick={() => setPerspective(p)}>
-                        {p === 'cpid' ? 'CPID' : p === 'station' ? 'Charging Station' : p === 'state' ? 'State' : 'Date'}
-                      </Button>
-                    ))}
-                  </Space>
-                </div>
-                {perspective === 'time' && (
-                  <Space size="small">
-                    {(['daily', 'weekly', 'monthly', 'yearly'] as TimePeriod[]).map(tp => (
-                      <Button key={tp} size="small" className={`rounded-btn${timePeriod === tp ? ' active-filter' : ''}`} onClick={() => setTimePeriod(tp)}>
-                        {tp.charAt(0).toUpperCase() + tp.slice(1)}
-                      </Button>
-                    ))}
-                  </Space>
-                )}
               </div>
             </Col>
           </Row>
