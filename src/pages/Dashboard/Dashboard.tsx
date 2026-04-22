@@ -447,7 +447,7 @@ function buildChartOption(
           z: 10,
           lineStyle: { type: 'dashed', color: '#0B173B', width: 2 },
           label: {
-            formatter: `Lifetime Average: ${avgValue.toFixed(0)} ${unit}`,
+            formatter: `Average: ${avgValue.toFixed(0)} ${unit}`,
             position: 'middle',
             distance: 0,
             verticalAlign: 'middle',
@@ -507,12 +507,12 @@ const Dashboard: React.FC = () => {
                 <div className="metric-info">
                   <div className="metric-label">Total revenue</div>
                   <div className="metric-value">₹ 1,23,456</div>
+                  <div className="metric-footer" style={{ marginTop: '10px' }}>
+                    <div className="metric-pill active">Today</div>
+                    <div className="metric-pill">Last 30 days</div>
+                    <div className="metric-pill">Last 90 days</div>
+                  </div>
                 </div>
-              </div>
-              <div className="metric-footer">
-                <div className="metric-pill active">Today</div>
-                <div className="metric-pill">Last 30 days</div>
-                <div className="metric-pill">Last 90 days</div>
               </div>
             </div>
           </Col>
@@ -525,12 +525,12 @@ const Dashboard: React.FC = () => {
                 <div className="metric-info">
                   <div className="metric-label">Total Energy Usage</div>
                   <div className="metric-value">1,23,456 kWh</div>
+                  <div className="metric-footer" style={{ marginTop: '10px' }}>
+                    <div className="metric-pill active">Today</div>
+                    <div className="metric-pill">Last 30 days</div>
+                    <div className="metric-pill">Last 90 days</div>
+                  </div>
                 </div>
-              </div>
-              <div className="metric-footer">
-                <div className="metric-pill active">Today</div>
-                <div className="metric-pill">Last 30 days</div>
-                <div className="metric-pill">Last 90 days</div>
               </div>
             </div>
           </Col>
@@ -556,6 +556,10 @@ const Dashboard: React.FC = () => {
                 <div className="metric-info">
                   <div className="metric-label">Unavailable Connectors</div>
                   <div className="metric-value">25/500</div>
+                  <div className="metric-footer" style={{ marginTop: '10px' }}>
+                    <div className="metric-pill ac-chip">AC: 10</div>
+                    <div className="metric-pill dc-chip">DC: 15</div>
+                  </div>
                 </div>
               </div>
             </div>
